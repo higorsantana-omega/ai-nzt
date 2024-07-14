@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 import { getPackageInfo } from './utils/get-package-info';
+import { commit } from './commands/commit';
 
 process.on('SIGINT', () => process.exit(0))
 process.on('SIGTERM', () => process.exit(0))
@@ -15,6 +16,9 @@ async function main () {
     .version(packageInfo.version || '0.0.1',
       '-v, --version',
       'display the version number');
+
+  program
+    .addCommand(commit)
 
   program.parse();
 }
