@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import { getPackageInfo } from './utils/get-package-info';
 import { commit } from './commands/commit';
+import { config } from './commands/config';
 
 process.on('SIGINT', () => process.exit(0))
 process.on('SIGTERM', () => process.exit(0))
@@ -19,6 +20,7 @@ async function main () {
 
   program
     .addCommand(commit)
+    .addCommand(config)
 
   program.parse();
 }
