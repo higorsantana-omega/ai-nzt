@@ -6,6 +6,8 @@ import { createCommitMessage } from "../utils/ai/gemini";
 import { getConfig } from "../utils/config/get-config";
 import { gitCommit } from "../utils/git/git-commit";
 
+const confirmCommitArray: boolean[] = []
+
 export const commit = new Command()
   .name('commit')
   .description('Commit changes')
@@ -27,9 +29,9 @@ export const commit = new Command()
     }
 
     const commitMessage = await createCommitMessage(stagedFiles.join('\n'))
-    const confirmedCommit = await promptAfterGenerateCommitMessage(commitMessage)
+    await promptAfterGenerateCommitMessage(commitMessage)
 
-    console.log(confirmedCommit)
+    const confirmedCommit = confirmCommitArray[confirmCommitArray.length - 1]
 
     if (confirmedCommit) {
       await promptCommit(commitMessage)
@@ -83,10 +85,10 @@ export const promptAfterGenerateCommitMessage = async (commitMessage: string) =>
       await promptAfterGenerateCommitMessage(editedCommitMessage)
     }
   
-    return false
+    confirmCommitArray.push(false)
   }
 
-  return true
+  confirmCommitArray.push(true)
 }
 
 export const promptCommit = async (commitMessage: string) => {
